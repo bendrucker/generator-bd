@@ -72,6 +72,8 @@ module.exports = yeoman.generators.Base.extend({
       this.template('readme.md')
       this.template('test.js', 'test/index.js')
 
+      this.npmInstall()
+
       cb()
     }.bind(this))
   }
