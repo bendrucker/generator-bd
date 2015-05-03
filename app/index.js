@@ -16,6 +16,20 @@ module.exports = yeoman.generators.Base.extend({
         filter: paramCase
       },
       {
+        name: 'description',
+        message: 'What\'s the module\'s description?'
+      },
+      {
+        name: 'keywords',
+        message: 'What are the keywords?',
+        default: [],
+        filter: function (value) {
+          return value.split(',').map(function (keyword) {
+            return keyword.trim()
+          })
+        }
+      },
+      {
         name: 'githubUsername',
         message: 'What is your GitHub username?',
         store: true,
