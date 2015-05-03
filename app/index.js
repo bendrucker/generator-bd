@@ -2,7 +2,9 @@
 
 const yeoman = require('yeoman')
 const paramCase = require('param-case')
+const camelCase = require('camel-case')
 const normalizeUrl = require('normalize-url')
+const humanizeUrl = require('humanize-url')
 
 module.exports = yeoman.generators.Base.extend({
   init: function () {
@@ -47,7 +49,27 @@ module.exports = yeoman.generators.Base.extend({
         filter: normalizeUrl
       }
     ], function (props) {
+      this.moduleName = props.moduleName
+      this.description = props.description
+      this.keywords = props.keywords
+      this.camelModuleName = camelCase(props.moduleName)
+      this.githubUsername = props.githubUsername
+      this.name = this.user.git.name()
+      this.email = this.user.git.email()
+      this.website = props.website
+      this.humanizedWebsite = humanizeUrl(this.website)
 
-    })
+      this.template('editorconfig', '.editorconfig')
+      this.template('gitattributes', '.gitattributes')
+      this.template('gitignore', '.gitignore')
+      this.template('travis.yml', '.travis.yml')
+      this.template('src.js', 'src/index.js')
+      this.template('license')
+      this.template('_package.json', 'package.json')
+      this.template('readme.md')
+      this.template('test.js', 'test/index.js')
+
+      cb()
+    }.bind(this))
   }
 })
