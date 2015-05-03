@@ -27,5 +27,12 @@
     "standard": "bendrucker/standard#babel",
     "publicist": "~4.0.0",
     "publicist-es5": "~1.0.0"
+  },
+  "publicist": {
+    "builds": {
+      "es5": {
+        "dest": "./release"
+      }
+    }
   }
 }
