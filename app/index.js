@@ -1,6 +1,6 @@
 'use strict'
 
-const yeoman = require('yeoman')
+const yeoman = require('yeoman-generator')
 const paramCase = require('param-case')
 const camelCase = require('camel-case')
 const normalizeUrl = require('normalize-url')
