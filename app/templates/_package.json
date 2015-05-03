@@ -1,0 +1,25 @@
+{
+  "name": "<%= moduleName %>",
+  "version": "0.0.0",
+  "description": "<%= description %>",
+  "license": "MIT",
+  "repository": "<%= githubUsername %>/<%= moduleName %>",
+  "author": {
+    "name": "<%= name %>",
+    "email": "<%= email %>",
+    "url": "<%= humanizedWebsite %>"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "standard && babel-tape-runner test/*.js"
+  },
+  "keywords": <%= keywords %>,
+  "dependencies": {},
+  "devDependencies": {
+    "babel-tape-runner": "*",
+    "tape": "^4.0.0",
+    "standard": "bendrucker/standard#babel"
+  }
+}
