@@ -26,7 +26,7 @@ module.exports = yeoman.generators.Base.extend({
         message: 'What are the keywords?',
         default: [],
         filter: function (value) {
-          return value.split(',').map(function (keyword) {
+          return (value || '').split(',').map(function (keyword) {
             return keyword.trim()
           })
         }
@@ -51,7 +51,10 @@ module.exports = yeoman.generators.Base.extend({
     ], function (props) {
       this.moduleName = props.moduleName
       this.description = props.description
-      this.keywords = props.keywords
+      this.keywordString = props.keywords.map(function (keyword) {
+        return '"' + keyword + '"'
+      })
+      .join(',\n    ')
       this.camelModuleName = camelCase(props.moduleName)
       this.githubUsername = props.githubUsername
       this.name = this.user.git.name()

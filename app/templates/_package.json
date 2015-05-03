@@ -15,7 +15,9 @@
   "scripts": {
     "test": "standard && babel-tape-runner test/*.js"
   },
-  "keywords": <%= keywords %>,
+  "keywords": [
+    <%= keywordString %>
+  ],
   "dependencies": {},
   "devDependencies": {
     "babel-tape-runner": "*",
