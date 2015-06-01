@@ -14,7 +14,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "standard && tape test/*.js"
+    "test": "standard && tape test.js"
   },
   "keywords": [
     <%= keywordString %>
