@@ -66,11 +66,11 @@ module.exports = yeoman.generators.Base.extend({
       this.template('gitattributes', '.gitattributes')
       this.template('gitignore', '.gitignore')
       this.template('travis.yml', '.travis.yml')
-      this.template('src.js', 'src/index.js')
+      this.template('index.js', 'index.js')
       this.template('license')
       this.template('_package.json', 'package.json')
       this.template('readme.md')
-      this.template('test.js', 'test/index.js')
+      this.template('test.js', 'test.js')
 
       this.npmInstall()
 
