@@ -1,6 +1,6 @@
 {
   "name": "generator-bd",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Yeoman generator for scaffolding modules",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
