@@ -1,8 +1,8 @@
 'use strict'
 
-import test from 'tape'
-import <%= camelModuleName %> from '../'
+var test = require('tape')
+var <%= camelModuleName %> = require('./')
 
-test((t) => {
+test(function (t) {
 
 })
