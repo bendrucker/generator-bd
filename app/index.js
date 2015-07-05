@@ -1,14 +1,14 @@
 'use strict'
 
-const yeoman = require('yeoman-generator')
-const paramCase = require('param-case')
-const camelCase = require('camel-case')
-const normalizeUrl = require('normalize-url')
-const humanizeUrl = require('humanize-url')
+var yeoman = require('yeoman-generator')
+var paramCase = require('param-case')
+var camelCase = require('camel-case')
+var normalizeUrl = require('normalize-url')
+var humanizeUrl = require('humanize-url')
 
 module.exports = yeoman.generators.Base.extend({
   init: function () {
-    const cb = this.async()
+    var cb = this.async()
 
     this.prompt([
       {
