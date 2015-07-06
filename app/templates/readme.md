@@ -13,26 +13,26 @@ $ npm install --save <%= moduleName %>
 ## Usage
 
 ```js
-var <%= camelModuleName %> = require('<%= moduleName %>');
+var <%= camelModuleName %> = require('<%= moduleName %>')
 
-<%= camelModuleName %>('unicorns');
-//=> unicorns & rainbows
+<%= camelModuleName %>('input')
+//=> output
 ```
 
 ## API
 
-### <%= camelModuleName %>(input, [options])
+#### `<%= camelModuleName %>(input, [options])` -> `output`
 
-#### input
+##### input
 
 *Required*  
 Type: `string`
 
 Lorem ipsum.
 
-#### options
+##### options
 
-##### foo
+###### foo
 
 Type: `boolean`  
 Default: `false`
