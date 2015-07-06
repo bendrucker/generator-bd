@@ -10,9 +10,6 @@
     "email": "<%= email %>",
     "url": "<%= humanizedWebsite %>"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "scripts": {
     "test": "standard && tape test.js"
   },
