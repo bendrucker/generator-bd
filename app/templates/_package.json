@@ -19,7 +19,6 @@
   "keywords": [
     <%= keywordString %>
   ],
-  "dependencies": {},
   "devDependencies": {
     "tape": "^4.0.0",
     "standard": "^4.0.0"
