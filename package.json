@@ -3,7 +3,7 @@
   "version": "2.6.0",
   "description": "Yeoman generator for scaffolding modules",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape '!(node_modules)/test.js'"
   },
   "repository": {
     "type": "git",
