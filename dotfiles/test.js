@@ -23,3 +23,16 @@ test('gitattributes', async function (t) {
     'sets text=auto for all files'
   )
 })
+
+test('gitignore', async function (t) {
+  await yeoman.run(__dirname)
+  t.ok(existsSync('./.gitignore'), 'exists')
+  
+  await execa('git', ['init'])
+  t.equal(
+    await execa.stdout('git', ['check-ignore', 'node_modules']),
+    'node_modules',
+    'ignores node_modules'
+  )
+  t.shouldFail(execa.stdout('git', ['check-ignore', 'index.js']))
+})
