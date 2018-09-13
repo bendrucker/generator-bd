@@ -10,7 +10,7 @@ module.exports = class Dotfiles extends Generator {
     return Promise.all(templates.map(template => {
       this.fs.copy(
         this.templatePath(template),
-        this.destinationPath(template)
+        this.destinationPath('.' + template)
       )
     }))
   }
