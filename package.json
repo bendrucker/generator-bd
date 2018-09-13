@@ -26,6 +26,7 @@
     "camel-case": "~3.0.0",
     "cast-array": "^1.0.1",
     "humanize-url": "~1.0.1",
+    "js-yaml": "^3.12.0",
     "lts-schedule": "^2.0.2",
     "mit": "^0.1.3",
     "normalize-url": "~3.3.0",
@@ -36,7 +37,6 @@
     "blue-tape": "^1.0.0",
     "editorconfig": "^0.15.0",
     "execa": "^1.0.0",
-    "js-yaml": "^3.12.0",
     "tape": "^4.9.1",
     "yeoman-test": "^1.9.1"
   }

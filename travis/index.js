@@ -3,6 +3,7 @@
 const Generator = require('yeoman-generator')
 const {promises: {readdir}} = require('fs')
 const array = require('cast-array')
+const yaml = require('js-yaml')
 
 module.exports = class Travis extends Generator {
   constructor (args, options) {
@@ -14,15 +15,16 @@ module.exports = class Travis extends Generator {
     })
 
     this.option('versions', {
-      type: array,
+      type: (versions) => array(versions).map(String),
       required: true
     })
   }
   configuring () {
-    this.fs.copyTpl(
-      this.templatePath('.travis.yml.ejs'),
-      this.destinationPath('.travis.yml'),
-      this.options
-    )
+    const {language, versions} = this.options
+
+    this.fs.write('.travis.yml', yaml.safeDump({
+      language,
+      [language]: versions
+    }))
   }
 }
