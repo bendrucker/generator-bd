@@ -1,11 +1,11 @@
 'use strict'
 
 const Generator = require('yeoman-generator')
-const fs = require('fs').promises
+const {promises: {readdir}} = require('fs')
 
 module.exports = class Dotfiles extends Generator {
   async configuring () {
-    const templates = await fs.readdir(this.sourceRoot())
+    const templates = await readdir(this.sourceRoot())
     
     return Promise.all(templates.map(template => {
       this.fs.copy(
