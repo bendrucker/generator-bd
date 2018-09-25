@@ -11,10 +11,8 @@ module.exports = class NodeModule extends Generator {
   
   _package () {
     const {name, description, github, me} = this.options
-
-    const existing = this.fs.readJSON(this.destinationPath('package.json'))
     
-    const result = merge(existing || {}, {
+    this.fs.writeJSON('package.json', sort({
       name,
       main: 'index.js',
       version: '0.0.0',
@@ -23,8 +21,6 @@ module.exports = class NodeModule extends Generator {
       repository: `${github.username}/${name}`,
       author: me,
       files: ['*.js']
-    })
-
-    this.fs.writeJSON('package.json', sort(result))
+    }))
   }
 }
