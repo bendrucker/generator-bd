@@ -5,6 +5,10 @@ const sort = require('sort-package-json')
 
 module.exports = class NodeModule extends Generator {
   configuring () {
+    this._package()
+  }
+  
+  _package () {
     const {name, description, github, me} = this.options
 
     const existing = this.fs.read(this.destionationPath('package.json'))
