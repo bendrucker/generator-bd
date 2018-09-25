@@ -1,6 +1,7 @@
 'use strict'
 
 const Generator = require('yeoman-generator')
+const merge = require('deep-extend')
 const sort = require('sort-package-json')
 
 module.exports = class NodeModule extends Generator {
@@ -11,8 +12,9 @@ module.exports = class NodeModule extends Generator {
   _package () {
     const {name, description, github, me} = this.options
 
-    const existing = this.fs.read(this.destionationPath('package.json'))
-    const result = merge(existing, {
+    const existing = this.fs.readJSON(this.destinationPath('package.json'))
+    
+    const result = merge(existing || {}, {
       name,
       main: 'index.js',
       version: '0.0.0',
@@ -23,6 +25,6 @@ module.exports = class NodeModule extends Generator {
       files: ['*.js']
     })
 
-    this.fs.write('package.json', JSON.stringify(sort(result)))
+    this.fs.writeJSON('package.json', sort(result))
   }
 }
