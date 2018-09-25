@@ -8,6 +8,12 @@ module.exports = class NodeModule extends Generator {
   configuring () {
     this._package()
   }
+
+  installing () {
+    this.npmInstall(['standard', 'tape'], {
+      'save-dev': true
+    })
+  }
   
   _package () {
     const {name, description, github, me} = this.options
