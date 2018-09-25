@@ -22,7 +22,7 @@ module.exports = class NodeModule extends Generator {
       name,
       main: 'index.js',
       version: '0.0.0',
-      description: this.options.description,
+      description,
       license: 'MIT',
       repository: `${github.username}/${name}`,
       author: me,
