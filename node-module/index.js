@@ -7,6 +7,13 @@ const camel = require('camel-case')
 const dedent = require('endent')
 
 module.exports = class NodeModule extends Generator {
+  initializing () {
+    this.composeWith(require.resolve('../travis'), {
+      language: 'node_js',
+      versions: ['lts/*', 'node']
+    })
+  }
+
   configuring () {
     this._package()
   }
