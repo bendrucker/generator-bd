@@ -2,8 +2,8 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
+const path = require('path')
 const {existsSync, promises: {readFile}} = require('fs')
-const vm = require('vm')
 const Module = require('module')
 const {types: {isAsyncFunction}} = require('util')
 
@@ -53,7 +53,7 @@ test('index', async function (t) {
       '}'
     ], 'renders code')
     
-    const fn = run(code)
+    const fn = require(path.resolve(process.cwd(), 'index.js'))
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
     t.notOk(isAsyncFunction(fn), 'is sync')
@@ -73,15 +73,9 @@ test('index', async function (t) {
       '}'
     ], 'renders code')
     
-    const fn = run(code)
+    const fn = require(path.resolve(process.cwd(), 'index.js'))
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
     t.ok(isAsyncFunction(fn), 'is async')
   })
 })
-
-function run (code) {
-  const context = vm.createContext({module: new Module()})
-  vm.runInContext(code, context)
-  return context.module.exports
-}
