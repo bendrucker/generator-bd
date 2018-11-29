@@ -2,7 +2,7 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
-const {promises: {readFile}} = require('fs')
+const { promises: { readFile } } = require('fs')
 const yaml = require('js-yaml')
 
 test('travis', async function (t) {

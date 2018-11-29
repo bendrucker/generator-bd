@@ -1,7 +1,6 @@
 'use strict'
 
 const Generator = require('yeoman-generator')
-const merge = require('deep-extend')
 const sort = require('sort-package-json')
 const camel = require('camel-case')
 const dedent = require('endent')
@@ -38,8 +37,8 @@ module.exports = class NodeModule extends Generator {
       main,
       '()'
     ]
-    .filter(Boolean)
-    .join(' ')
+      .filter(Boolean)
+      .join(' ')
 
     this.fs.write('index.js', dedent`
       'use strict'
@@ -66,10 +65,10 @@ module.exports = class NodeModule extends Generator {
       })
     `)
   }
-  
+
   _package () {
-    const {name, description, github, me} = this.options
-    
+    const { name, description, github, me } = this.options
+
     this.fs.writeJSON('package.json', sort({
       name,
       main: 'index.js',

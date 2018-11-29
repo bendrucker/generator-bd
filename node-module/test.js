@@ -3,15 +3,15 @@
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
 const path = require('path')
-const {existsSync, promises: {readFile}} = require('fs')
-const {types: {isAsyncFunction}} = require('util')
+const { existsSync, promises: { readFile } } = require('fs')
+const { types: { isAsyncFunction } } = require('util')
 const dedent = require('endent')
 const execa = require('execa')
 
 const options = {
   name: 'my-pkg',
   description: 'A great package',
-  github: {username: 'bendrucker'},
+  github: { username: 'bendrucker' },
   me: {
     name: 'Ben Drucker',
     email: 'bvdrucker@gmail.com',
@@ -53,7 +53,7 @@ test('index', async function (t) {
       'function myPkg () {',
       '}'
     ], 'renders code')
-    
+
     const fn = require(path.resolve(process.cwd(), 'index.js'))
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
@@ -61,7 +61,7 @@ test('index', async function (t) {
   })
 
   t.test('async', async function (t) {
-    await yeoman.run(__dirname).withOptions(Object.assign({async: true}, options))
+    await yeoman.run(__dirname).withOptions(Object.assign({ async: true }, options))
 
     t.ok(existsSync('./index.js'), 'exists')
     const code = await readFile('./index.js', 'utf8')
@@ -73,7 +73,7 @@ test('index', async function (t) {
       'async function myPkg () {',
       '}'
     ], 'renders code')
-    
+
     const fn = require(path.resolve(process.cwd(), 'index.js'))
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
@@ -99,7 +99,7 @@ test('test', async function (t) {
   `, 'renders code')
 
   t.test('running', async function (t) {
-    await yeoman.run(__dirname).withOptions(Object.assign({skipInstall: false}, options))
+    await yeoman.run(__dirname).withOptions(Object.assign({ skipInstall: false }, options))
 
     const output = await execa.stdout('node', ['./test.js'])
     t.equal(output, dedent`
@@ -111,6 +111,6 @@ test('test', async function (t) {
       # pass  0
       
       # ok
-    ` + '\n', 'prints passing TAP')  
+    ` + '\n', 'prints passing TAP')
   })
 })

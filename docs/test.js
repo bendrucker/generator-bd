@@ -2,7 +2,7 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
-const {existsSync, promises: {readFile}} = require('fs')
+const { existsSync, promises: { readFile } } = require('fs')
 
 test('license', async function (t) {
   await yeoman.run(__dirname).withOptions({

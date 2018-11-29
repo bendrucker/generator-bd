@@ -2,7 +2,7 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
-const {existsSync} = require('fs')
+const { existsSync } = require('fs')
 const editorconfig = require('editorconfig')
 const execa = require('execa')
 
@@ -27,7 +27,7 @@ test('gitattributes', async function (t) {
 test('gitignore', async function (t) {
   await yeoman.run(__dirname)
   t.ok(existsSync('./.gitignore'), 'exists')
-  
+
   await execa('git', ['init'])
   t.equal(
     await execa.stdout('git', ['check-ignore', 'node_modules']),

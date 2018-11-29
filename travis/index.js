@@ -1,7 +1,6 @@
 'use strict'
 
 const Generator = require('yeoman-generator')
-const {promises: {readdir}} = require('fs')
 const array = require('cast-array')
 const yaml = require('js-yaml')
 
@@ -20,7 +19,7 @@ module.exports = class Travis extends Generator {
     })
   }
   configuring () {
-    const {language, versions} = this.options
+    const { language, versions } = this.options
 
     this.fs.write('.travis.yml', yaml.safeDump({
       language,
