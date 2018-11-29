@@ -4,8 +4,9 @@ const test = require('blue-tape')
 const yeoman = require('yeoman-test')
 const path = require('path')
 const {existsSync, promises: {readFile}} = require('fs')
-const Module = require('module')
 const {types: {isAsyncFunction}} = require('util')
+const dedent = require('endent')
+const execa = require('execa')
 
 const options = {
   name: 'my-pkg',
@@ -77,5 +78,39 @@ test('index', async function (t) {
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
     t.ok(isAsyncFunction(fn), 'is async')
+  })
+})
+
+test('test', async function (t) {
+  await yeoman.run(__dirname).withOptions(Object.assign(options))
+
+  t.ok(existsSync('./test.js'), 'exists')
+  const code = await readFile('./test.js', 'utf8')
+
+  t.equal(code, dedent`
+    'use strict'
+
+    const test = require('blue-tape')
+    const myPkg = require('./')
+
+    test('my-pkg', t => {
+      t.end()
+    })
+  `, 'renders code')
+
+  t.test('running', async function (t) {
+    await yeoman.run(__dirname).withOptions(Object.assign({skipInstall: false}, options))
+
+    const output = await execa.stdout('node', ['./test.js'])
+    t.equal(output, dedent`
+      TAP version 13
+      # my-pkg
+  
+      1..0
+      # tests 0
+      # pass  0
+      
+      # ok
+    ` + '\n', 'prints passing TAP')  
   })
 })

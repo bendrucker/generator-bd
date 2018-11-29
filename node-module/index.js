@@ -20,10 +20,11 @@ module.exports = class NodeModule extends Generator {
 
   writing () {
     this._index()
+    this._test()
   }
 
   installing () {
-    this.npmInstall(['standard', 'tape'], {
+    this.npmInstall(['standard', 'blue-tape'], {
       'save-dev': true
     })
   }
@@ -48,6 +49,22 @@ module.exports = class NodeModule extends Generator {
       ${declaration} {
 
       }`)
+  }
+
+  _test () {
+    const { name } = this.options
+    const main = camel(name)
+
+    this.fs.write('test.js', dedent`
+      'use strict'
+
+      const test = require('blue-tape')
+      const ${main} = require('./')
+
+      test('${name}', t => {
+        t.end()
+      })
+    `)
   }
   
   _package () {
