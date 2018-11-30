@@ -11,6 +11,8 @@ module.exports = class NodeModule extends Generator {
       language: 'node_js',
       versions: ['lts/*', 'node']
     })
+
+    this.composeWith(require.resolve('../dotfiles'))
   }
 
   configuring () {
