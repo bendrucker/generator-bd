@@ -59,9 +59,9 @@ test('package', async function (t) {
   )
 
   t.test('extends existing contents', async function (t) {
-    await run().inTmpDir((dir) => writeFileSync(path.resolve(dir, 'package.json'), JSON.stringify({
+    await run().inTmpDir(withPackage({
       private: true
-    })))
+    }))
 
     const pkg = JSON.parse(await readFile('./package.json'))
 
@@ -109,6 +109,26 @@ test('index', async function (t) {
     t.equal(typeof fn, 'function', 'is function')
     t.equal(fn.name, 'myPkg', 'named myPkg')
     t.ok(isAsyncFunction(fn), 'is async')
+  })
+
+  t.test('skip: different main', async function (t) {
+    await run().inTmpDir(withPackage({
+      main: 'foo.js'
+    }))
+
+    t.notOk(existsSync('./index.js'), 'index.js is not created')
+  })
+
+  t.test('skip: index exists', async function (t) {
+    await run().inTmpDir(
+      (dir) => writeFileSync(path.resolve(dir, 'index.js'), 'module.exports = 1')
+    )
+
+    t.equal(
+      await readFile('./index.js', 'utf8'),
+      'module.exports = 1',
+      'index.js is not overwritten'
+    )
   })
 })
 
@@ -163,4 +183,10 @@ function run () {
     .withArguments(args)
     .withOptions(options)
     .withPrompts(prompts)
+}
+
+function withPackage (data) {
+  return function writePackage (dir) {
+    writeFileSync(path.resolve(dir, 'package.json'), JSON.stringify(data))
+  }
 }

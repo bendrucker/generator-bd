@@ -69,6 +69,12 @@ module.exports = class NodeModule extends Generator {
   }
 
   _index () {
+    const file = 'index.js'
+    const pkg = this._readPackage()
+
+    if (pkg.main && basename(pkg.main) !== file) return
+    if (this.fs.exists(file)) return
+
     const main = camel(this.options.name)
 
     const declaration = [
@@ -80,7 +86,7 @@ module.exports = class NodeModule extends Generator {
       .filter(Boolean)
       .join(' ')
 
-    this.fs.write('index.js', dedent`
+    this.fs.write(file, dedent`
       'use strict'
 
       module.exports = ${main}
@@ -108,7 +114,7 @@ module.exports = class NodeModule extends Generator {
 
   _package () {
     const { github, options: { name, description } } = this
-    const existing = this.fs.readJSON('package.json')
+    const existing = this._readPackage()
     const defaults = {
       main: 'index.js',
       version: '0.0.0',
@@ -132,9 +138,12 @@ module.exports = class NodeModule extends Generator {
     })
   }
 
+  _readPackage () {
+    return this.fs.readJSON('package.json', {})
+  }
+
   _sortPackage () {
-    const pkg = this.fs.readJSON('package.json', {})
-    this.fs.writeJSON('package.json', sortPackage(pkg))
+    this.fs.writeJSON('package.json', sortPackage(this._readPackage()))
   }
 
   _npmrc () {
