@@ -7,20 +7,35 @@ const { existsSync, promises: { readFile } } = require('fs')
 const { types: { isAsyncFunction } } = require('util')
 const dedent = require('endent')
 const execa = require('execa')
+const nock = require('nock')
 
 const options = {
-  name: 'my-pkg',
-  description: 'A great package',
-  github: { username: 'bendrucker' },
-  me: {
-    name: 'Ben Drucker',
-    email: 'bvdrucker@gmail.com',
-    website: 'http://bendrucker.me'
-  }
+  name: 'my-pkg'
 }
 
+const prompts = {
+  description: 'A great package'
+}
+
+process.env.GITHUB_TOKEN = 'gh-token'
+nock('https://api.github.com', {
+  reqheaders: {
+    authorization: 'token gh-token'
+  }
+})
+.get('/user')
+.reply(200, {
+  login: 'bendrucker',
+  name: 'Ben Drucker',
+  email: 'bvdrucker@gmail.com',
+  blog: 'http://bendrucker.me'
+})
+.persist()
+
 test('package', async function (t) {
-  await yeoman.run(__dirname).withOptions(options)
+  await yeoman.run(__dirname)
+    .withOptions(options)
+    .withPrompts(prompts)
 
   t.ok(existsSync('./package.json'), 'exists')
   t.deepEqual(JSON.parse(await readFile('./package.json')), {
@@ -33,7 +48,7 @@ test('package', async function (t) {
     author: {
       name: 'Ben Drucker',
       email: 'bvdrucker@gmail.com',
-      website: 'http://bendrucker.me'
+      url: 'http://bendrucker.me'
     },
     files: ['*.js']
   }, 'package written')
@@ -41,7 +56,9 @@ test('package', async function (t) {
 
 test('index', async function (t) {
   t.test('sync', async function (t) {
-    await yeoman.run(__dirname).withOptions(options)
+    await yeoman.run(__dirname)
+      .withOptions(options)
+      .withPrompts(prompts)
 
     t.ok(existsSync('./index.js'), 'exists')
     const code = await readFile('./index.js', 'utf8')
@@ -61,7 +78,9 @@ test('index', async function (t) {
   })
 
   t.test('async', async function (t) {
-    await yeoman.run(__dirname).withOptions(Object.assign({ async: true }, options))
+    await yeoman.run(__dirname)
+      .withOptions(Object.assign({ async: true }, options))
+      .withPrompts(prompts)
 
     t.ok(existsSync('./index.js'), 'exists')
     const code = await readFile('./index.js', 'utf8')
@@ -82,7 +101,9 @@ test('index', async function (t) {
 })
 
 test('test', async function (t) {
-  await yeoman.run(__dirname).withOptions(Object.assign(options))
+  await yeoman.run(__dirname)
+    .withOptions(options)
+    .withPrompts(prompts)
 
   t.ok(existsSync('./test.js'), 'exists')
   const code = await readFile('./test.js', 'utf8')
@@ -99,7 +120,9 @@ test('test', async function (t) {
   `, 'renders code')
 
   t.test('running', async function (t) {
-    await yeoman.run(__dirname).withOptions(Object.assign({ skipInstall: false }, options))
+    await yeoman.run(__dirname)
+      .withOptions(Object.assign({ skipInstall: false }, options))
+      .withPrompts(prompts)
 
     const output = await execa.stdout('node', ['./test.js'])
     t.equal(output, dedent`
