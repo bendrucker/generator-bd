@@ -41,7 +41,6 @@ test('npmrc', async function (t) {
   await yeoman.run(__dirname)
   t.ok(existsSync('./.npmrc'), 'exists')
 
-  
   t.equal(
     await execa.stdout('npm', ['config', 'get', 'package-lock']),
     'false',
