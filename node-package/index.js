@@ -3,7 +3,6 @@
 const { basename } = require('path')
 
 const Generator = require('yeoman-generator')
-const sort = require('sort-package-json')
 const camel = require('camel-case')
 const dedent = require('endent')
 const octokit = require('@octokit/rest')()
@@ -39,9 +38,9 @@ module.exports = class NodeModule extends Generator {
   }
 
   async prompting () {
-    const { description } = this.fs.readJSON('package.json')
+    const { description } = this.fs.readJSON('package.json', {})
 
-    Object.assign(this.options, { description }, await this.prompt([
+    Object.assign(this.options, await this.prompt([
       {
         name: 'description',
         message: 'Enter a description for the package',
@@ -53,6 +52,7 @@ module.exports = class NodeModule extends Generator {
 
   configuring () {
     this._package()
+    this._npmrc()
   }
 
   writing () {
@@ -106,20 +106,28 @@ module.exports = class NodeModule extends Generator {
 
   _package () {
     const { github, options: { name, description } } = this
-
-    this.fs.extendJSON('package.json', {
-      name,
+    const existing = this.fs.readJSON('package.json')
+    const defaults = {
       main: 'index.js',
       version: '0.0.0',
       description,
       license: 'MIT',
+      files: ['*.js']
+    }
+
+    this.fs.writeJSON('package.json', Object.assign({}, defaults, existing, {
+      name,
+      description,
       repository: `${github.login}/${name}`,
       author: {
         name: github.name,
         email: github.email,
         url: github.blog
-      },
-      files: ['*.js']
-    })
+      }
+    }))
+  }
+
+  _npmrc () {
+    this.fs.write('.npmrc', 'package-lock=false')
   }
 }

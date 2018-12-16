@@ -155,3 +155,18 @@ test('test', async function (t) {
     ` + '\n', 'prints passing TAP')
   })
 })
+
+test('npmrc', async function (t) {
+  await yeoman.run(__dirname)
+    .withArguments(args)
+    .withOptions(options)
+    .withPrompts(prompts)
+
+  t.ok(existsSync('./.npmrc'), 'exists')
+
+  t.equal(
+    await readFile('./.npmrc', 'utf8'),
+    'package-lock=false',
+    'disables package-lock via .npmrc'
+  )
+})

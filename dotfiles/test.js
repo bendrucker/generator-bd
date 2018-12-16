@@ -2,7 +2,7 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
-const { existsSync, promises: { readFile } } = require('fs')
+const { existsSync } = require('fs')
 const editorconfig = require('editorconfig')
 const execa = require('execa')
 
@@ -35,15 +35,4 @@ test('gitignore', async function (t) {
     'ignores node_modules'
   )
   t.shouldFail(execa.stdout('git', ['check-ignore', 'index.js']))
-})
-
-test('npmrc', async function (t) {
-  await yeoman.run(__dirname)
-  t.ok(existsSync('./.npmrc'), 'exists')
-
-  t.equal(
-    await readFile('./.npmrc', 'utf8'),
-    'package-lock=false',
-    'disables package-lock'
-  )
 })

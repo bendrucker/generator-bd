@@ -3,7 +3,7 @@
   "version": "2.6.0",
   "description": "Yeoman generator for scaffolding modules",
   "scripts": {
-    "test": "standard && tape '!(node_modules)/test.js'"
+    "test": "standard && tape '*/test.js'"
   },
   "repository": {
     "type": "git",
