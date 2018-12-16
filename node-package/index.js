@@ -104,7 +104,7 @@ module.exports = class NodeModule extends Generator {
   _package () {
     const { github, options: { name, description } } = this
 
-    this.fs.writeJSON('package.json', sort({
+    this.fs.extendJSON('package.json', {
       name,
       main: 'index.js',
       version: '0.0.0',
@@ -117,6 +117,6 @@ module.exports = class NodeModule extends Generator {
         url: github.blog
       },
       files: ['*.js']
-    }))
+    })
   }
 }

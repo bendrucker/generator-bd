@@ -3,7 +3,7 @@
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
 const path = require('path')
-const { existsSync, promises: { readFile } } = require('fs')
+const { existsSync, writeFileSync, promises: { readFile } } = require('fs')
 const { types: { isAsyncFunction } } = require('util')
 const dedent = require('endent')
 const execa = require('execa')
@@ -51,6 +51,21 @@ test('package', async function (t) {
     },
     files: ['*.js']
   }, 'package written')
+
+  t.test('extends existing contents', async function (t) {
+    await yeoman.run(__dirname)
+      .inTmpDir((dir) => writeFileSync(path.resolve(dir, 'package.json'), JSON.stringify({
+        private: true
+      })))
+      .withArguments(args)
+      .withOptions(options)
+      .withPrompts(prompts)
+
+    const pkg = JSON.parse(await readFile('./package.json'))
+
+    t.equal(pkg.name, 'my-pkg', 'contains generated properties')
+    t.equal(pkg.private, true, 'contains existing properties')
+  })
 })
 
 test('index', async function (t) {
