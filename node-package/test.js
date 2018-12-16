@@ -37,7 +37,10 @@ test('package', async function (t) {
     .withPrompts(prompts)
 
   t.ok(existsSync('./package.json'), 'exists')
-  t.deepEqual(JSON.parse(await readFile('./package.json')), {
+  
+  const pkg = JSON.parse(await readFile('./package.json'))
+
+  t.deepEqual(pkg, {
     name: 'my-pkg',
     main: 'index.js',
     version: '0.0.0',
@@ -51,6 +54,12 @@ test('package', async function (t) {
     },
     files: ['*.js']
   }, 'package written')
+
+  t.deepEqual(
+    Object.keys(pkg).slice(0, 2),
+    ['name', 'version'],
+    'uses pre-defined sort order'
+  )
 
   t.test('extends existing contents', async function (t) {
     await yeoman.run(__dirname)

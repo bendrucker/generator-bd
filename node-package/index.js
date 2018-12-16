@@ -5,6 +5,7 @@ const { basename } = require('path')
 const Generator = require('yeoman-generator')
 const camel = require('camel-case')
 const dedent = require('endent')
+const sortPackage = require('sort-package-json')
 const octokit = require('@octokit/rest')()
 
 module.exports = class NodeModule extends Generator {
@@ -58,6 +59,7 @@ module.exports = class NodeModule extends Generator {
   writing () {
     this._index()
     this._test()
+    this._sortPackage()
   }
 
   installing () {
@@ -125,6 +127,11 @@ module.exports = class NodeModule extends Generator {
         url: github.blog
       }
     }))
+  }
+
+  _sortPackage () {
+    const pkg = this.fs.readJSON('package.json', {})
+    this.fs.writeJSON('package.json', sortPackage(pkg))
   }
 
   _npmrc () {
