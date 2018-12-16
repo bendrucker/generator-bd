@@ -2,7 +2,7 @@
 
 const test = require('blue-tape')
 const yeoman = require('yeoman-test')
-const { existsSync } = require('fs')
+const { existsSync, promises: { readFile } } = require('fs')
 const editorconfig = require('editorconfig')
 const execa = require('execa')
 
@@ -42,8 +42,8 @@ test('npmrc', async function (t) {
   t.ok(existsSync('./.npmrc'), 'exists')
 
   t.equal(
-    await execa.stdout('npm', ['config', 'get', 'package-lock']),
-    'false',
+    await readFile('./.npmrc', 'utf8'),
+    'package-lock=false',
     'disables package-lock'
   )
 })
