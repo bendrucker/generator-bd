@@ -14,7 +14,6 @@ module.exports = class NodeModule extends Generator {
 
     this.argument('name', {
       type: String,
-      required: true,
       default: basename(process.cwd())
     })
   }
