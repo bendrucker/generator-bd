@@ -23,14 +23,14 @@ nock('https://api.github.com', {
     authorization: 'token gh-token'
   }
 })
-.get('/user')
-.reply(200, {
-  login: 'bendrucker',
-  name: 'Ben Drucker',
-  email: 'bvdrucker@gmail.com',
-  blog: 'http://bendrucker.me'
-})
-.persist()
+  .get('/user')
+  .reply(200, {
+    login: 'bendrucker',
+    name: 'Ben Drucker',
+    email: 'bvdrucker@gmail.com',
+    blog: 'http://bendrucker.me'
+  })
+  .persist()
 
 test('package', async function (t) {
   await yeoman.run(__dirname)
