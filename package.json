@@ -2,26 +2,32 @@
   "name": "generator-bd",
   "version": "2.6.0",
   "description": "Yeoman generator for scaffolding modules",
-  "scripts": {
-    "test": "standard && tape '*/test.js'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bendrucker/generator-bd.git"
-  },
   "keywords": [
-    "yeoman-generator",
+    "ben",
     "generator",
-    "yeoman",
     "module",
-    "ben"
+    "yeoman",
+    "yeoman-generator"
   ],
-  "author": "Ben Drucker <bvdrucker@gmail.com> (http://www.bendrucker.me/)",
-  "license": "MIT",
+  "homepage": "https://github.com/bendrucker/generator-bd#readme",
   "bugs": {
     "url": "https://github.com/bendrucker/generator-bd/issues"
   },
-  "homepage": "https://github.com/bendrucker/generator-bd#readme",
+  "repository": "bendrucker/generator-bd",
+  "license": "MIT",
+  "author": {
+    "name": "Ben Drucker",
+    "email": "bvdrucker@gmail.com",
+    "url": "http://www.bendrucker.me"
+  },
+  "files": [
+    "*.js",
+    "generators/"
+  ],
+  "main": "generators/",
+  "scripts": {
+    "test": "standard && tape './generators/*/test.js'"
+  },
   "dependencies": {
     "@octokit/rest": "^16.2.0",
     "camel-case": "~3.0.0",
