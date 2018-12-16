@@ -9,10 +9,8 @@ const dedent = require('endent')
 const execa = require('execa')
 const nock = require('nock')
 
-const options = {
-  name: 'my-pkg'
-}
-
+const args = ['my-pkg']
+const options = {}
 const prompts = {
   description: 'A great package'
 }
@@ -34,6 +32,7 @@ nock('https://api.github.com', {
 
 test('package', async function (t) {
   await yeoman.run(__dirname)
+    .withArguments(args)
     .withOptions(options)
     .withPrompts(prompts)
 
@@ -57,6 +56,7 @@ test('package', async function (t) {
 test('index', async function (t) {
   t.test('sync', async function (t) {
     await yeoman.run(__dirname)
+      .withArguments(args)
       .withOptions(options)
       .withPrompts(prompts)
 
@@ -79,6 +79,7 @@ test('index', async function (t) {
 
   t.test('async', async function (t) {
     await yeoman.run(__dirname)
+      .withArguments(args)
       .withOptions(Object.assign({ async: true }, options))
       .withPrompts(prompts)
 
@@ -102,6 +103,7 @@ test('index', async function (t) {
 
 test('test', async function (t) {
   await yeoman.run(__dirname)
+    .withArguments(args)
     .withOptions(options)
     .withPrompts(prompts)
 
@@ -121,6 +123,7 @@ test('test', async function (t) {
 
   t.test('running', async function (t) {
     await yeoman.run(__dirname)
+      .withArguments(args)
       .withOptions(Object.assign({ skipInstall: false }, options))
       .withPrompts(prompts)
 

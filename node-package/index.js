@@ -9,6 +9,16 @@ const dedent = require('endent')
 const octokit = require('@octokit/rest')()
 
 module.exports = class NodeModule extends Generator {
+  constructor (args, options) {
+    super(args, options)
+
+    this.argument('name', {
+      type: String,
+      required: true,
+      default: basename(process.cwd())
+    })
+  }
+
   async initializing () {
     this.composeWith(require.resolve('../travis'), {
       language: 'node_js',
@@ -16,10 +26,6 @@ module.exports = class NodeModule extends Generator {
     })
 
     this.composeWith(require.resolve('../dotfiles'))
-
-    this.package = {
-      name: this.options.name || basename(process.cwd())
-    }
 
     this.github = await this._githubUser()
   }
@@ -34,11 +40,11 @@ module.exports = class NodeModule extends Generator {
   }
 
   async prompting () {
-    Object.assign(this.package, await this.prompt([
+    Object.assign(this.options, await this.prompt([
       {
         name: 'description',
         message: 'Enter a description for the package',
-        validate: (description) => description.length
+        validate: (description) => Boolean(description.length)
       }
     ]))
   }
@@ -97,15 +103,15 @@ module.exports = class NodeModule extends Generator {
   }
 
   _package () {
-    const { github, package: pkg } = this
+    const { github, options: { name, description } } = this
 
     this.fs.writeJSON('package.json', sort({
-      name: pkg.name,
+      name,
       main: 'index.js',
       version: '0.0.0',
-      description: pkg.description,
+      description,
       license: 'MIT',
-      repository: `${github.login}/${pkg.name}`,
+      repository: `${github.login}/${name}`,
       author: {
         name: github.name,
         email: github.email,
