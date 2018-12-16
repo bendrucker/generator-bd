@@ -27,7 +27,7 @@ module.exports = class NodeModule extends Generator {
     this.composeWith(require.resolve('../dotfiles'))
 
     this.github = await this._githubUser()
-  } 
+  }
 
   async _githubUser () {
     octokit.authenticate({
@@ -170,7 +170,6 @@ function defined (object) {
 }
 
 function hasPathArg (command, filePath) {
-  debugger
   return command
     .split(' ')
     .map(arg => path.normalize(arg))
