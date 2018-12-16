@@ -49,7 +49,10 @@ test('package', async function (t) {
       email: 'bvdrucker@gmail.com',
       url: 'http://bendrucker.me'
     },
-    files: ['*.js']
+    files: ['*.js'],
+    scripts: {
+      test: 'standard && tape test.js'
+    }
   }, 'package written')
 
   t.deepEqual(
@@ -163,6 +166,24 @@ test('test', async function (t) {
       
       # ok
     ` + '\n', 'prints passing TAP')
+  })
+
+  t.test('skip: test.js exists', async function (t) {
+    await run().inTmpDir(
+      (dir) => writeFileSync(path.resolve(dir, 'test.js'), 'module.exports = 1')
+    )
+
+    t.equal(await readFile('./test.js', 'utf8'), 'module.exports = 1', 'not overwritten')
+  })
+
+  t.test('skip: scripts.test does not include test.js', async function (t) {
+    await run().inTmpDir(withPackage({
+      scripts: {
+        test: 'run-test lib/test.js'
+      }
+    }))
+
+    t.notOk(existsSync('test.js'), 'file not created')
   })
 })
 

@@ -1,6 +1,6 @@
 'use strict'
 
-const { basename } = require('path')
+const path = require('path')
 
 const Generator = require('yeoman-generator')
 const camel = require('camel-case')
@@ -14,7 +14,7 @@ module.exports = class NodeModule extends Generator {
 
     this.argument('name', {
       type: String,
-      default: basename(process.cwd())
+      default: path.basename(process.cwd())
     })
   }
 
@@ -27,7 +27,7 @@ module.exports = class NodeModule extends Generator {
     this.composeWith(require.resolve('../dotfiles'))
 
     this.github = await this._githubUser()
-  }
+  } 
 
   async _githubUser () {
     octokit.authenticate({
@@ -72,7 +72,7 @@ module.exports = class NodeModule extends Generator {
     const file = 'index.js'
     const pkg = this._readPackage()
 
-    if (pkg.main && basename(pkg.main) !== file) return
+    if (pkg.main && path.basename(pkg.main) !== file) return
     if (this.fs.exists(file)) return
 
     const main = camel(this.options.name)
@@ -97,10 +97,16 @@ module.exports = class NodeModule extends Generator {
   }
 
   _test () {
+    const file = 'test.js'
+    const { scripts = {} } = this._readPackage()
+
+    if (!(scripts.test && hasPathArg(scripts.test, file))) return
+    if (this.fs.exists(file)) return
+
     const { name } = this.options
     const main = camel(name)
 
-    this.fs.write('test.js', dedent`
+    this.fs.write(file, dedent`
       'use strict'
 
       const test = require('blue-tape')
@@ -119,7 +125,10 @@ module.exports = class NodeModule extends Generator {
       main: 'index.js',
       version: '0.0.0',
       license: 'MIT',
-      files: ['*.js']
+      files: ['*.js'],
+      scripts: {
+        test: 'standard && tape test.js'
+      }
     }
 
     this.fs.writeJSON('package.json', {
@@ -158,4 +167,12 @@ function defined (object) {
       ...acc,
       [key]: value
     }), {})
+}
+
+function hasPathArg (command, filePath) {
+  debugger
+  return command
+    .split(' ')
+    .map(arg => path.normalize(arg))
+    .some(arg => arg === filePath)
 }
