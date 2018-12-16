@@ -31,10 +31,7 @@ nock('https://api.github.com', {
   .persist()
 
 test('package', async function (t) {
-  await yeoman.run(__dirname)
-    .withArguments(args)
-    .withOptions(options)
-    .withPrompts(prompts)
+  await run()
 
   t.ok(existsSync('./package.json'), 'exists')
 
@@ -62,13 +59,9 @@ test('package', async function (t) {
   )
 
   t.test('extends existing contents', async function (t) {
-    await yeoman.run(__dirname)
-      .inTmpDir((dir) => writeFileSync(path.resolve(dir, 'package.json'), JSON.stringify({
-        private: true
-      })))
-      .withArguments(args)
-      .withOptions(options)
-      .withPrompts(prompts)
+    await run().inTmpDir((dir) => writeFileSync(path.resolve(dir, 'package.json'), JSON.stringify({
+      private: true
+    })))
 
     const pkg = JSON.parse(await readFile('./package.json'))
 
@@ -79,10 +72,7 @@ test('package', async function (t) {
 
 test('index', async function (t) {
   t.test('sync', async function (t) {
-    await yeoman.run(__dirname)
-      .withArguments(args)
-      .withOptions(options)
-      .withPrompts(prompts)
+    await run()
 
     t.ok(existsSync('./index.js'), 'exists')
     const code = await readFile('./index.js', 'utf8')
@@ -102,10 +92,7 @@ test('index', async function (t) {
   })
 
   t.test('async', async function (t) {
-    await yeoman.run(__dirname)
-      .withArguments(args)
-      .withOptions(Object.assign({ async: true }, options))
-      .withPrompts(prompts)
+    await run().withOptions({ async: true, ...options })
 
     t.ok(existsSync('./index.js'), 'exists')
     const code = await readFile('./index.js', 'utf8')
@@ -126,10 +113,7 @@ test('index', async function (t) {
 })
 
 test('test', async function (t) {
-  await yeoman.run(__dirname)
-    .withArguments(args)
-    .withOptions(options)
-    .withPrompts(prompts)
+  await run()
 
   t.ok(existsSync('./test.js'), 'exists')
   const code = await readFile('./test.js', 'utf8')
@@ -146,10 +130,7 @@ test('test', async function (t) {
   `, 'renders code')
 
   t.test('running', async function (t) {
-    await yeoman.run(__dirname)
-      .withArguments(args)
-      .withOptions(Object.assign({ skipInstall: false }, options))
-      .withPrompts(prompts)
+    await run().withOptions({ skipInstall: false, ...options })
 
     const output = await execa.stdout('node', ['./test.js'])
     t.equal(output, dedent`
@@ -166,10 +147,7 @@ test('test', async function (t) {
 })
 
 test('npmrc', async function (t) {
-  await yeoman.run(__dirname)
-    .withArguments(args)
-    .withOptions(options)
-    .withPrompts(prompts)
+  await run()
 
   t.ok(existsSync('./.npmrc'), 'exists')
 
@@ -179,3 +157,10 @@ test('npmrc', async function (t) {
     'disables package-lock via .npmrc'
   )
 })
+
+function run () {
+  return yeoman.run(__dirname)
+    .withArguments(args)
+    .withOptions(options)
+    .withPrompts(prompts)
+}
