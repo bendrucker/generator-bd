@@ -39,7 +39,7 @@ module.exports = class NodeModule extends Generator {
   }
 
   async prompting () {
-    const { description } = this.fs.readJSON('package.json', {})
+    const { description } = this.fs.readJSON('./package.json', {})
 
     Object.assign(this.options, await this.prompt([
       {
@@ -112,21 +112,24 @@ module.exports = class NodeModule extends Generator {
     const defaults = {
       main: 'index.js',
       version: '0.0.0',
-      description,
       license: 'MIT',
       files: ['*.js']
     }
 
-    this.fs.writeJSON('package.json', Object.assign({}, defaults, existing, {
-      name,
-      description,
-      repository: `${github.login}/${name}`,
-      author: {
-        name: github.name,
-        email: github.email,
-        url: github.blog
-      }
-    }))
+    this.fs.writeJSON('package.json', {
+      ...defaults,
+      ...existing,
+      ...defined({
+        name,
+        description,
+        repository: `${github.login}/${name}`,
+        author: {
+          name: github.name,
+          email: github.email,
+          url: github.blog
+        }
+      })
+    })
   }
 
   _sortPackage () {
@@ -137,4 +140,13 @@ module.exports = class NodeModule extends Generator {
   _npmrc () {
     this.fs.write('.npmrc', 'package-lock=false')
   }
+}
+
+function defined (object) {
+  return Object.entries(object)
+    .filter(([key, value]) => typeof value !== 'undefined')
+    .reduce((acc, [key, value]) => ({
+      ...acc,
+      [key]: value
+    }), {})
 }

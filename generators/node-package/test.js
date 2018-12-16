@@ -37,7 +37,7 @@ test('package', async function (t) {
     .withPrompts(prompts)
 
   t.ok(existsSync('./package.json'), 'exists')
-  
+
   const pkg = JSON.parse(await readFile('./package.json'))
 
   t.deepEqual(pkg, {
