@@ -39,11 +39,14 @@ module.exports = class NodeModule extends Generator {
   }
 
   async prompting () {
-    Object.assign(this.options, await this.prompt([
+    const { description } = this.fs.readJSON('package.json')
+
+    Object.assign(this.options, { description }, await this.prompt([
       {
         name: 'description',
         message: 'Enter a description for the package',
-        validate: (description) => Boolean(description.length)
+        validate: (description) => Boolean(description.length),
+        when: () => !description
       }
     ]))
   }
