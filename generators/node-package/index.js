@@ -26,7 +26,21 @@ module.exports = class NodeModule extends Generator {
 
     this.composeWith(require.resolve('../dotfiles'))
 
-    this.github = await this._githubUser()
+    const github = this.github = await this._githubUser()
+
+    const { name, description } = this.options
+
+    this.composeWith(require.resolve('../readme'), {
+      name,
+      user: github.login,
+      description,
+      language: 'js',
+      install: 'npm install --save ' + name,
+      usage: `const ${camel(name)} = require('${name}')`,
+      api: this._api(),
+      author: github.name,
+      homepage: github.blog
+    })
   }
 
   async _githubUser () {
@@ -157,6 +171,21 @@ module.exports = class NodeModule extends Generator {
 
   _npmrc () {
     this.fs.write('.npmrc', 'package-lock=false')
+  }
+
+  _api () {
+    return dedent`
+      # \`${camel(this.options.name)}(arg)\` -> \`?\`
+
+      Function descripion.
+
+      ## arg
+
+      *Required*  
+      Type: \`string\`
+
+      Arg description
+    `
   }
 }
 
