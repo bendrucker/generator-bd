@@ -3,7 +3,7 @@
 const Generator = require('yeoman-generator')
 const mit = require('mit')
 
-module.exports = class Docs extends Generator {
+module.exports = class License extends Generator {
   constructor (args, options) {
     super(args, options)
 
