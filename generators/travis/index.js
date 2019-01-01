@@ -18,6 +18,7 @@ module.exports = class Travis extends Generator {
       required: true
     })
   }
+  
   configuring () {
     const { language, versions } = this.options
 
